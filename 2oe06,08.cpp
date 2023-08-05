@@ -104,7 +104,6 @@ private:
 };
 
 FinanceManager::FinanceManager() {
-    // Load data from file (if exists)
     loadDataFromFile();
 }
 
@@ -113,7 +112,7 @@ void FinanceManager::run() {
         displayMainMenu();
         int choice;
         cin >> choice;
-        cin.ignore(); // Ignore the newline character after reading menu choice.
+        cin.ignore();
 
         switch (choice) {
             case 1:
@@ -132,7 +131,6 @@ void FinanceManager::run() {
                 generateRankings();
                 break;
             case 0:
-                // Save data to file and exit
                 saveDataToFile();
                 cout << "Exiting the Finance Manager. Goodbye!\n";
                 return;
@@ -157,16 +155,13 @@ void FinanceManager::displayMainMenu() const {
 }
 
 void FinanceManager::displayWalletsAndCards() const {
-    // Display the list of existing wallets and cards with their balances.
     cout << "----------------------------------------\n";
     cout << "Wallets and Cards\n";
     cout << "----------------------------------------\n";
-    // Display existing wallets with their balances
     cout << "Wallets:\n";
     for (const Wallet& wallet : wallets) {
         cout << " - " << wallet.getName() << ": $" << fixed << setprecision(2) << wallet.getBalance() << endl;
     }
-    // Display existing cards with their balances and limits
     cout << "Cards:\n";
     for (const Card& card : cards) {
         cout << " - " << card.getName() << ": $" << fixed << setprecision(2) << card.getBalance()
@@ -176,7 +171,6 @@ void FinanceManager::displayWalletsAndCards() const {
 }
 
 void FinanceManager::displayCategories() const {
-    // Display the list of existing categories.
     cout << "----------------------------------------\n";
     cout << "Expense Categories\n";
     cout << "----------------------------------------\n";
@@ -187,7 +181,6 @@ void FinanceManager::displayCategories() const {
 }
 
 void FinanceManager::displayReports() const {
-    // Display options to generate reports for day, week, and month.
     cout << "----------------------------------------\n";
     cout << "Generate Reports\n";
     cout << "----------------------------------------\n";
@@ -200,7 +193,6 @@ void FinanceManager::displayReports() const {
 }
 
 void FinanceManager::displayRankings() const {
-    // Display options to generate rankings for top expenses and categories in week and month.
     cout << "----------------------------------------\n";
     cout << "Generate Rankings\n";
     cout << "----------------------------------------\n";
@@ -214,7 +206,6 @@ void FinanceManager::displayRankings() const {
 }
 
 void FinanceManager::createWalletOrCard() {
-    // Ask user to create a new wallet or card with a name and initial balance.
     string name;
     double initialBalance;
     int type;
@@ -227,7 +218,7 @@ void FinanceManager::createWalletOrCard() {
 
     cout << "Select the type (1 - Wallet, 2 - Card): ";
     cin >> type;
-    cin.ignore(); // Ignore the newline character after reading type.
+    cin.ignore();
 
     if (type == 1) {
         wallets.push_back(Wallet(name, initialBalance));
@@ -236,7 +227,7 @@ void FinanceManager::createWalletOrCard() {
         double limit;
         cout << "Enter the credit limit: $";
         cin >> limit;
-        cin.ignore(); // Ignore the newline character after reading limit.
+        cin.ignore();
         cards.push_back(Card(name, limit, initialBalance));
         cout << "Card created successfully.\n";
     } else {
@@ -245,7 +236,6 @@ void FinanceManager::createWalletOrCard() {
 }
 
 void FinanceManager::createCategory() {
-    // Ask user to create a new expense category.
     string name;
     cout << "Enter the name of the category: ";
     getline(cin, name);
@@ -254,7 +244,6 @@ void FinanceManager::createCategory() {
 }
 
 void FinanceManager::addExpense() {
-    // Ask user to add a new expense with description, amount, and category.
     string description;
     double amount;
     int categoryIndex;
@@ -273,7 +262,7 @@ void FinanceManager::addExpense() {
     cout << "Select the category:\n";
     displayCategories();
     cin >> categoryIndex;
-    cin.ignore(); // Ignore the newline character after reading categoryIndex.
+    cin.ignore();
 
     if (categoryIndex >= 1 && categoryIndex <= categories.size()) {
         expenses.push_back(Expense(description, amount, categories[categoryIndex - 1]));
@@ -284,29 +273,28 @@ void FinanceManager::addExpense() {
 }
 
 void FinanceManager::generateReports() {
-    // Generate daily, weekly, or monthly reports based on user choice.
     int choice;
     displayReports();
     cin >> choice;
-    cin.ignore(); // Ignore the newline character after reading choice.
+    cin.ignore();
 
     time_t now = time(0);
     tm* timeinfo = localtime(&now);
     int currentDay = timeinfo->tm_mday;
-    int currentWeek = timeinfo->tm_yday / 7; // Weeks since January 1st
-    int currentMonth = timeinfo->tm_mon + 1; // Month range: 0-11
+    int currentWeek = timeinfo->tm_yday / 7;
+    int currentMonth = timeinfo->tm_mon + 1;
 
     cout << "----------------------------------------\n";
     switch (choice) {
-        case 1: // Daily Report
+        case 1:
             cout << "Daily Report\n";
             cout << "Date: " << currentMonth << "/" << currentDay << endl;
             break;
-        case 2: // Weekly Report
+        case 2:
             cout << "Weekly Report\n";
             cout << "Week: " << currentWeek << endl;
             break;
-        case 3: // Monthly Report
+        case 3:
             cout << "Monthly Report\n";
             cout << "Month: " << currentMonth << endl;
             break;
@@ -318,10 +306,9 @@ void FinanceManager::generateReports() {
     double totalExpenses = 0.0;
 
     for (const Expense& expense : expenses) {
-        // Filter expenses based on the selected report type (day, week, month).
         int expenseDay = timeinfo->tm_mday;
-        int expenseWeek = timeinfo->tm_yday / 7; // Weeks since January 1st
-        int expenseMonth = timeinfo->tm_mon + 1; // Month range: 0-11
+        int expenseWeek = timeinfo->tm_yday / 7;
+        int expenseMonth = timeinfo->tm_mon + 1;
 
         if ((choice == 1 && expenseDay == currentDay) ||
             (choice == 2 && expenseWeek == currentWeek) ||
@@ -337,27 +324,26 @@ void FinanceManager::generateReports() {
 }
 
 void FinanceManager::generateRankings() {
-    // Generate top 3 expenses and categories in week or month based on user choice.
     int choice;
     displayRankings();
     cin >> choice;
-    cin.ignore(); // Ignore the newline character after reading choice.
+    cin.ignore();
 
-    int currentWeek = time(0) / (7 * 24 * 60 * 60); // Weeks since January 1st
-    int currentMonth = time(0) / (30 * 24 * 60 * 60); // Months since January 1st
+    int currentWeek = time(0) / (7 * 24 * 60 * 60);
+    int currentMonth = time(0) / (30 * 24 * 60 * 60);
 
     cout << "----------------------------------------\n";
     switch (choice) {
-        case 1: // Top Expenses in Week
+        case 1:
             cout << "Top Expenses in Week " << currentWeek << endl;
             break;
-        case 2: // Top Expenses in Month
+        case 2:
             cout << "Top Expenses in Month " << currentMonth << endl;
             break;
-        case 3: // Top Categories in Week
+        case 3:
             cout << "Top Categories in Week " << currentWeek << endl;
             break;
-        case 4: // Top Categories in Month
+        case 4:
             cout << "Top Categories in Month " << currentMonth << endl;
             break;
         default:
@@ -366,12 +352,11 @@ void FinanceManager::generateRankings() {
     }
     cout << "----------------------------------------\n";
 
-    // Collect expenses for the selected week or month.
     map<string, double> categoryExpenses;
 
     for (const Expense& expense : expenses) {
-        int expenseWeek = time(0) / (7 * 24 * 60 * 60); // Weeks since January 1st
-        int expenseMonth = time(0) / (30 * 24 * 60 * 60); // Months since January 1st
+        int expenseWeek = time(0) / (7 * 24 * 60 * 60);
+        int expenseMonth = time(0) / (30 * 24 * 60 * 60);
 
         if ((choice == 1 && expenseWeek == currentWeek) ||
             (choice == 2 && expenseMonth == currentMonth)) {
@@ -379,14 +364,12 @@ void FinanceManager::generateRankings() {
         }
     }
 
-    // Sort the expenses and categories in descending order.
     vector<pair<string, double>> sortedExpenses(categoryExpenses.begin(), categoryExpenses.end());
     sort(sortedExpenses.begin(), sortedExpenses.end(),
          [](const pair<string, double>& a, const pair<string, double>& b) {
              return a.second > b.second;
          });
 
-    // Display top 3 expenses or categories.
     int count = 0;
     for (const auto& item : sortedExpenses) {
         if (count >= 3) {
@@ -399,7 +382,6 @@ void FinanceManager::generateRankings() {
 }
 
 void FinanceManager::saveDataToFile() const {
-    // Save data to a file in CSV format.
     ofstream file("finance_data.csv");
 
     if (!file) {
@@ -407,21 +389,15 @@ void FinanceManager::saveDataToFile() const {
         return;
     }
 
-    // Save wallets and cards
     for (const Wallet& wallet : wallets) {
         file << "W," << wallet.getName() << "," << wallet.getBalance() << "\n";
     }
-
     for (const Card& card : cards) {
         file << "C," << card.getName() << "," << card.getLimit() << "," << card.getBalance() << "\n";
     }
-
-    // Save categories
     for (const Category& category : categories) {
         file << "T," << category.getName() << "\n";
     }
-
-    // Save expenses
     for (const Expense& expense : expenses) {
         file << "E," << expense.getDescription() << "," << expense.getAmount() << "," << expense.getCategory().getName() << "\n";
     }
@@ -431,7 +407,6 @@ void FinanceManager::saveDataToFile() const {
 }
 
 void FinanceManager::loadDataFromFile() {
-    // Load data from the file in CSV format.
     ifstream file("finance_data.csv");
 
     if (!file) {
