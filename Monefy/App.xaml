@@ -1,0 +1,29 @@
+﻿<Application x:Class="Monefy.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Monefy"
+             xmlns:View="clr-namespace:Monefy.View"
+             xmlns:ViewModel="clr-namespace:Monefy.ViewModel"
+             StartupUri="View/MonefyView.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.LightGreen.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <DataTemplate DataType="{x:Type ViewModel:MonefyViewModel}">
+                <View:MonefyView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type ViewModel:GeneralViewModel}">
+                <View:GeneralView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type ViewModel:HistoryViewModel}">
+                <View:HistoryView/>
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
